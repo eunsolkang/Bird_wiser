@@ -1,0 +1,33 @@
+<p>Drop your favorite fruits below:</p>
+<ol class="dropzone"
+    ondragenter="dragEnterHandler(event)"
+    ondragover="dragOverHandler(event)"
+    ondrop="dropHandler(event)">
+</ol>
+<script>
+  var internalDNDType = 'text/x-example'; // set this to something specific to your site
+  function dragEnterHandler(event) {
+    // cancel the event if the drag contains data of our type
+    if (event.dataTransfer.types.contains(internalDNDType))
+      event.preventDefault();
+  }
+  function dragOverHandler(event) {
+    event.dataTransfer.dropEffect = 'move';
+    event.preventDefault(); // override default drag feedback
+  }
+  function dropHandler(event) {
+    // drop the data
+    var li = document.createElement('li');
+    var data = event.dataTransfer.getData(internalDNDType);
+    if (data == 'fruit-apple') {
+      li.textContent = 'Apples';
+    } else if (data == 'fruit-orange') {
+      li.textContent = 'Oranges';
+    } else if (data == 'fruit-pear') {
+      li.textContent = 'Pears';
+    } else {
+      li.textContent = 'Unknown Fruit';
+    }
+    event.target.appendChild(li);
+  }
+</script>

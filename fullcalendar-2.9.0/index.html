@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<link href='fullcalendar.css' rel='stylesheet' />
+<link href='fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='lib/moment.min.js'></script>
+<script src='lib/jquery.min.js'></script>
+<script src='fullcalendar.min.js'></script>
+<script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
+<script src='gcal.js'></script>
+<script>
+
+	$(document).ready(function() {
+
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+			defaultDate: '2016-07-12',
+			selectable: true,
+			selectHelper: true,
+			select: function(start, end) {
+
+				var title = prompt('Event Title:');
+
+				month_names_short =  ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+				var Month = start.toString().substring(7,4)
+				var startMonth = month_names_short.indexOf(Month.toString()) + 1;
+				if (startMonth < 10){startMonth = "0"+startMonth}
+
+				var startYear = start.toString().substring(11, 15);
+				var startDay = start.toString().substring(8, 10)
+
+				start = startYear +"-"+ startMonth +"-"+ startDay + "T09:00:00.000-00:00"
+
+				var Month = end.toString().substring(7,4)
+				var endMonth = month_names_short.indexOf(Month.toString()) + 1;
+				if (endMonth < 10){endMonth = "0"+endMonth}
+
+				var endYear = end.toString().substring(11, 15);
+				var endDay = end.toString().substring(8, 10);
+
+			 	end= endYear +"-"+ endMonth +"-"+ endDay + "T06:00:00.000-00:00"
+
+
+	      resource = {
+		      "summary": title,
+		      "location": "Somewhere",
+		      "start": {
+			    	"dateTime": start
+			  	},
+				  "end": {
+				    "dateTime": end
+				  }
+	    	};
+
+		    var request = gapi.client.calendar.events.insert({
+		      'calendarId': 'primary',
+		      'resource': resource
+		    });
+
+		    request.execute(function(resp) {
+		      EventId[EventId.length] = resp.id
+		    });
+				var eventData;
+				if (title) {
+					eventData = {
+						title: title,
+						start: start,
+						end: end
+					};
+					console.log(start);
+					$('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+				}
+				$('#calendar').fullCalendar('unselect');
+			},
+			editable: true,
+			eventLimit: true, // allow "more" link when too many events
+			googleCalendarApiKey: 'AIzaSyDcnW6WejpTOCffshGDDb4neIrXVUA1EAE',
+			events: 'en.south_korea#holiday@group.v.calendar.google.com',
+
+			eventClick: function(event) {
+				// opens events in a popup window
+				$('#calendar').fullCalendar( 'removeEvents' , event.id  )
+			},
+
+			loading: function(bool) {
+				$('#loading').toggle(bool);
+			}
+		});
+
+	});
+
+</script>
+<script></script>
+<style>
+
+	body {
+		margin: 40px 10px;
+		padding: 0;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		font-size: 14px;
+	}
+
+	#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+	#loading {
+		display: none;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+	.fc-toolbar
+	{
+		background-color: #c1281f;
+		color: white;
+		padding-top: 35px;
+		padding-bottom: 35px;
+	}
+	.fc-sun{
+		color:red;
+	}
+	.fc-sat{
+		color:blue;
+	}
+
+</style>
+</head>
+<body>
+
+    <div id="authorize-div">
+      <span>Authorize access to Google Calendar API</span>
+      <!--Button for the user to click to initiate auth sequence -->
+      <button id="authorize-button" onclick="handleAuthClick(event)">
+        Authorize
+      </button>
+    </div>
+	<div id='calendar'></div>
+
+</body>
+</html>

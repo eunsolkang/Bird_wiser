@@ -1,0 +1,62 @@
+body{
+	font-family:'나눔고딕';
+}
+#table_1 div::selection {
+  color: #f00;
+}
+
+td{
+	border : 1px solid black;
+	width: 150px;
+	height: 100px;
+	vertical-align: text-bottom;
+	text-align: right;
+	font-size: 20px;
+}
+th
+{
+	border: 1px solid black;
+}
+table{
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+#table_1 div
+{
+	text-align: left;
+	font-size: 13px;
+	width:140px;
+	height: 18px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 2px;
+	padding-left: 5px;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space:nowrap;
+}
+#table_1 div:nth-child(2n)
+{
+	background-color: #D7EAFD;
+}
+#table_1 div:nth-child(odd)
+{
+	background-color: #FCF2CE;
+}
+#table_1{
+	position:absolute;
+}
+.Sun {
+	background:whitesmoke;
+}
+.Sat{
+	background:whitesmoke;
+}
+#toDay{
+	background-color: gainsboro;
+}
+#test{
+	border: 1px solid black;
+	width: 100px;
+	height: 100px;
+}
